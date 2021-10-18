@@ -1,0 +1,31 @@
+{
+    "raids": [
+        {
+            "id": 0,
+            "value": {
+                "table": [
+                    {
+                        "name": "title",
+                        "value": "new raid"
+                    },
+                    {
+                        "name": "description",
+                        "value": "debsgkijsb"
+                    },
+                    {
+                        "name": "end_message",
+                        "value": "sbfgskélbgsdkjfbgsdik"
+                    },
+                    {
+                        "name": "datetime",
+                        "value": "2021-10-08T19:30:00"
+                    },
+                    {
+                        "name": "ping",
+                        "value": "<@&895060061104246844>"
+                    }
+                ]
+            }
+        }
+    ]
+}
