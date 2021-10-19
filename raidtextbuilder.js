@@ -42,7 +42,7 @@ function raidtextbuilder(raidtitle, description, creator, datetime, imageurl, pi
 			.setStyle('SECONDARY')
 			.setEmoji('💰'));
 	}
-	const embed = new MessageEmbed()
+	let embed = new MessageEmbed()
 		.setColor('#0099ff')
 		.setTitle(raidtitle)
 		// .setImage('http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png')
@@ -69,7 +69,7 @@ function raidtextbuilder(raidtitle, description, creator, datetime, imageurl, pi
 			},
 		);
 	if (imageurl != null) {
-		embed.setThumbnail(imageurl);
+		embed = embed.setThumbnail(imageurl);
 	}
 	return { content: ping_text, embeds: [embed], components: [row] };
 }
