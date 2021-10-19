@@ -60,14 +60,14 @@ module.exports = {
 						if ((!loot_need && interaction.customId == 'loot_need') || (loot_need && interaction.customId != 'loot_need')) {
 							new_element = new_element + moneybag;
 						}
-						new_lines.push(new_element + '\n');
+						new_lines.push(new_element);
 					}
 					else {
 						new_lines.push(element);
 					}
 				});
 				// reassign field value with newlines
-				const text = new_lines.join('');
+				const text = new_lines.join('\n');
 				new_flds.push({ name: fld.name, value: text, inline: fld.inline });
 			}
 			else {

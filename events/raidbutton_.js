@@ -54,11 +54,11 @@ module.exports = {
 					if (loot_need) {
 						new_element = new_element + moneybag;
 					}
-					new_lines.push(new_element + '\n');
+					new_lines.push(new_element);
 				}
 				let text = '\u200B';
 				if (new_lines.length > 0) {
-					text = new_lines.join('');
+					text = new_lines.join('\n');
 				}
 				new_flds.push({ name: fld.name, value: text, inline: fld.inline });
 			}
