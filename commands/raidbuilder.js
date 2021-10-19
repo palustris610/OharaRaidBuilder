@@ -18,7 +18,7 @@ module.exports = {
 				.setRequired(true))
 		.addStringOption(option =>
 			option.setName('imageurl')
-				.setDescription('URL of a custom imagem, or choose one from the options.')
+				.setDescription('Thumbnail image.')
 				.setRequired(false)
 				.addChoice('FFXIV Logo', 'http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png')
 				.addChoice('A Realm Reborn', 'https://img.finalfantasyxiv.com/lds/promo/h/r/l6eq3BOhy145X-sULOMDJFWUmg.png')
