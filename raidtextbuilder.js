@@ -23,7 +23,7 @@ const row = new MessageActionRow()
 
 function raidtextbuilder(raidtitle, description, creator, datetime, imageurl, ping, first_timers, loot_need) {
 	let ping_text = '\u200B';
-	if (ping.length > 0) {
+	if (ping.length != null) {
 		ping_text = ping_text + ping.toString();
 	}
 	let additional_description = '\nEvent time: ' + time(new Date(datetime)) +
@@ -68,7 +68,7 @@ function raidtextbuilder(raidtitle, description, creator, datetime, imageurl, pi
 				inline: true,
 			},
 		);
-	if (imageurl.length > 0) {
+	if (imageurl != null) {
 		embed.setThumbnail(imageurl);
 	}
 	return { content: ping_text, embeds: [embed], components: [row] };
