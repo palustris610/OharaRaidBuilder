@@ -22,6 +22,10 @@ const row = new MessageActionRow()
 	);
 
 function raidtextbuilder(raidtitle, description, creator, datetime, imageurl, ping, first_timers, loot_need) {
+	let ping_text = '\u200B';
+	if (ping.length > 0) {
+		ping_text = ping_text + ping.toString();
+	}
 	let additional_description = '\nEvent time: ' + time(new Date(datetime)) +
 	'\nRelative time: ' + time(new Date(datetime), 'R');
 	if (first_timers) {
@@ -43,7 +47,7 @@ function raidtextbuilder(raidtitle, description, creator, datetime, imageurl, pi
 		.setTitle(raidtitle)
 		// .setImage('http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png')
 		// .setThumbnail('http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png')
-		.setThumbnail(imageurl)
+		// .setThumbnail(imageurl)
 		.setDescription(description + additional_description)
 		.setTimestamp(new Date(datetime))
 		.setFooter('Event by ' + creator)
@@ -64,7 +68,10 @@ function raidtextbuilder(raidtitle, description, creator, datetime, imageurl, pi
 				inline: true,
 			},
 		);
-	return { content: ping.toString(), embeds: [embed], components: [row] };
+	if (imageurl.length > 0) {
+		embed.setThumbnail(imageurl);
+	}
+	return { content: ping_text, embeds: [embed], components: [row] };
 }
 
 
