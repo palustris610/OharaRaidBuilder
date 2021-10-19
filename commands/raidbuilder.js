@@ -1,25 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-// const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 const rtb = require('../raidtextbuilder.js');
-// const row = new MessageActionRow()
-// 	.addComponents(
-// 		new MessageButton()
-// 			.setCustomId('Tank')
-// 			.setStyle('SECONDARY')
-// 			.setEmoji('459085521931468800'),
-// 		new MessageButton()
-// 			.setCustomId('Healer')
-// 			.setStyle('SECONDARY')
-// 			.setEmoji('459085474481438730'),
-// 		new MessageButton()
-// 			.setCustomId('DPS')
-// 			.setStyle('SECONDARY')
-// 			.setEmoji('459085595667595274'),
-// 	);
-
-// .setTitle('New Raid!')
-// .setURL('https://discord.js.org')
-// .setDescription(text);
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('raidbuilder')
@@ -63,9 +43,9 @@ module.exports = {
 			interaction.options.getString('description'),
 			interaction.member.displayName,
 			interaction.options.getString('datetime'),
+			interaction.options.getString('imageurl'),
 			interaction.options.getRole('ping'),
 			interaction.options.getBoolean('first_timers'),
 			interaction.options.getBoolean('loot_need')));
-		// return interaction.reply({ content: interaction.options.getRole('ping'), embeds: [embed], components: [row] });
 	},
 };

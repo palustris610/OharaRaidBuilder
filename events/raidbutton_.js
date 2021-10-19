@@ -70,6 +70,5 @@ module.exports = {
 			.setFields(new_flds);
 
 		interaction.update({ content: msg.content, embeds: [new_embed], components: msg.components });
-		// console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
 	},
 };
