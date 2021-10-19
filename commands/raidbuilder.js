@@ -34,19 +34,29 @@ module.exports = {
 				.setRequired(true))
 		.addStringOption(option =>
 			option.setName('datetime')
-				.setDescription('Date and time of the Raid. Format: 2011-10-10T14:48:00')
+				.setDescription('Date and time of the Raid. Format: 2011-12-30T20:48:00')
 				.setRequired(true))
+		.addStringOption(option =>
+			option.setName('imageurl')
+				.setDescription('URL of a custom imagem, or choose one from the options.')
+				.setRequired(false)
+				.addChoice('FFXIV Logo', 'http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png')
+				.addChoice('A Realm Reborn', 'https://img.finalfantasyxiv.com/lds/promo/h/r/l6eq3BOhy145X-sULOMDJFWUmg.png')
+				.addChoice('Heavensward', 'https://img.finalfantasyxiv.com/lds/promo/h/N/2MK2uMX-m4uPXbeNPGvH_TnwOE.png')
+				.addChoice('Stormblood', 'https://img.finalfantasyxiv.com/lds/promo/h/n/fs9-H58JXdcSL44DFZimt9-3-8.png')
+				.addChoice('Shadowbringers', 'https://img.finalfantasyxiv.com/lds/promo/h/M/jmK4Q5CcFnBD1FfV90aw1zeUG8.png')
+				.addChoice('Endwalker', 'https://img.finalfantasyxiv.com/lds/promo/h/A/eqkthVf5uqxgBzUv66zhucFFh4.png'))
 		.addRoleOption(option =>
 			option.setName('ping')
-				.setDescription('Which role to mention?')
-				.setRequired(true))
+				.setDescription('Which Role to ping?')
+				.setRequired(false))
 		.addBooleanOption(option =>
 			option.setName('first_timers')
-				.setDescription('First timer marks, if needed')
+				.setDescription('First timer marks, if needed. Default: False')
 				.setRequired(false))
 		.addBooleanOption(option =>
 			option.setName('loot_need')
-				.setDescription('Loot need, if needed')
+				.setDescription('Loot need, if needed. Default: False')
 				.setRequired(false)),
 	async execute(interaction) {
 		return interaction.reply(rtb.raidtextbuilder(interaction.options.getString('title'),

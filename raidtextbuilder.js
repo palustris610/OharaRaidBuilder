@@ -21,7 +21,7 @@ const row = new MessageActionRow()
 			.setEmoji('459085595667595274'),
 	);
 
-function raidtextbuilder(raidtitle, description, creator, datetime, ping, first_timers, loot_need) {
+function raidtextbuilder(raidtitle, description, creator, datetime, imageurl, ping, first_timers, loot_need) {
 	let additional_description = '\nEvent time: ' + time(new Date(datetime)) +
 	'\nRelative time: ' + time(new Date(datetime), 'R');
 	if (first_timers) {
@@ -42,7 +42,8 @@ function raidtextbuilder(raidtitle, description, creator, datetime, ping, first_
 		.setColor('#0099ff')
 		.setTitle(raidtitle)
 		// .setImage('http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png')
-		.setThumbnail('http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png')
+		// .setThumbnail('http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png')
+		.setThumbnail(imageurl)
 		.setDescription(description + additional_description)
 		.setTimestamp(new Date(datetime))
 		.setFooter('Event by ' + creator)
