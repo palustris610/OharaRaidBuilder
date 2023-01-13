@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 module.exports = {
 	name: 'interactionCreate',
 	execute(interaction) {
@@ -66,7 +66,7 @@ module.exports = {
 				new_flds.push(fld);
 			}
 		}
-		const new_embed = new MessageEmbed(emb)
+		const new_embed = new EmbedBuilder(emb)
 			.setFields(new_flds);
 
 		interaction.update({ content: msg.content, embeds: [new_embed], components: msg.components });

@@ -1,23 +1,23 @@
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const {  ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
 const { time } = require('@discordjs/builders');
-const text_tanks = '\n<:tank:459085521931468800>Tanks\n';
-const text_healers = '\n<:healer:459085474481438730>Healers\n';
-const text_dpss = '\n<:dps:459085595667595274>DPSs\n';
+const text_tanks = '\n<:459085521931468800:>Tanks\n';
+const text_healers = '\n<:healer:>Healers\n';
+const text_dpss = '\n<:dps:>DPSs\n';
 const text_first_timers = '\nFirst timers are marked with <:ariagitgut:752675425905541120>';
 const text_loot_need = '\nLoot needers are marked with 💰';
-const row = new MessageActionRow()
+const row = new ActionRowBuilder()
 	.addComponents(
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('tank')
-			.setStyle('SECONDARY')
+			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('459085521931468800'),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('healer')
-			.setStyle('SECONDARY')
+			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('459085474481438730'),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('dps')
-			.setStyle('SECONDARY')
+			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('459085595667595274'),
 	);
 
@@ -30,24 +30,24 @@ function raidtextbuilder(raidtitle, description, creator, datetime, imageurl, pi
 	'\nRelative time: ' + time(new Date(datetime), 'R');
 	if (first_timers) {
 		additional_description = additional_description + text_first_timers;
-		row.addComponents(new MessageButton()
+		row.addComponents(new ButtonBuilder()
 			.setCustomId('first_timer')
-			.setStyle('SECONDARY')
+			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('752675425905541120'));
 	}
 	if (loot_need) {
 		additional_description = additional_description + text_loot_need;
-		row.addComponents(new MessageButton()
+		row.addComponents(new ButtonBuilder()
 			.setCustomId('loot_need')
-			.setStyle('SECONDARY')
+			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('💰'));
 	}
-	let embed = new MessageEmbed()
+	let embed = new EmbedBuilder()
 		.setColor('#0099ff')
 		.setTitle(raidtitle)
 		.setDescription(description + additional_description)
 		.setTimestamp(new Date(datetime))
-		.setFooter('Event by ' + creator)
+		.setFooter({text:'Event by ' + creator})
 		.addFields(
 			{
 				name: text_tanks,

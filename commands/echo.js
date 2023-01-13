@@ -9,6 +9,8 @@ module.exports = {
 				.setDescription('The input to echo back')
 				.setRequired(true)),
 	async execute(interaction) {
-		return interaction.reply('Echo: ' + interaction.options.getString('input'));
+		const text = 'Echo: ' + interaction.options.getString('input');
+		console.log(text);
+		return interaction.reply(text);
 	},
 };

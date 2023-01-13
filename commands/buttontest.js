@@ -1,29 +1,29 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js');
 const text = 'We are going to fight X raid boss at Monday. Preapre for trouble! And make it double!\n**Participants:**' +
 '\n<:tank:459085521931468800>Tanks\n' +
 '\n<:healer:459085474481438730>Healers\n' +
 '\n<:dps:459085595667595274>DPSs\n' +
 '\nPlease look forward to it! :)';
-const row = new MessageActionRow()
+const row = new ActionRowBuilder()
 	.addComponents(
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('tank')
 			// .setLabel('Tank')
-			.setStyle('SECONDARY')
+			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('459085521931468800'),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('healer')
 			// .setLabel('Healer')
-			.setStyle('SECONDARY')
+			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('459085474481438730'),
-		new MessageButton()
+		new ButtonBuilder()
 			.setCustomId('dps')
 			// .setLabel('DPS')
-			.setStyle('SECONDARY')
+			.setStyle(ButtonStyle.Secondary)
 			.setEmoji('459085595667595274'),
 	);
-const embed = new MessageEmbed()
+const embed = new EmbedBuilder()
 	.setColor('#0099ff')
 	.setTitle('New Raid!')
 	// .setURL('https://discord.js.org')
