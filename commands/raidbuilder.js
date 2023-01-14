@@ -21,7 +21,6 @@ module.exports = {
 				.setDescription('Thumbnail image.')
 				.setRequired(false)
 				.addChoices({name:'FFXIV Logo', value:'http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png'})
-				.addChoices({name:'FFXIV Logo', value:'http://fanfest2.finalfantasyxiv.com/thumbs/1200x675c/2018-07/simplified.png'})
 				.addChoices({name:'A Realm Reborn', value:'https://img.finalfantasyxiv.com/lds/promo/h/r/l6eq3BOhy145X-sULOMDJFWUmg.png'})
 				.addChoices({name:'Heavensward', value:'https://img.finalfantasyxiv.com/lds/promo/h/N/2MK2uMX-m4uPXbeNPGvH_TnwOE.png'})
 				.addChoices({name:'Stormblood', value:'https://img.finalfantasyxiv.com/lds/promo/h/n/fs9-H58JXdcSL44DFZimt9-3-8.png'})

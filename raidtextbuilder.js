@@ -1,8 +1,8 @@
 const {  ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
 const { time } = require('@discordjs/builders');
-const text_tanks = '\n<:459085521931468800:>Tanks\n';
-const text_healers = '\n<:healer:>Healers\n';
-const text_dpss = '\n<:dps:>DPSs\n';
+const text_tanks = '\n<:tank:1063529804432949378>Tanks\n';
+const text_healers = '\n<:healer:1063529792462409759>Healers\n';
+const text_dpss = '\n<:dps:1063529776385642616>DPSs\n';
 const text_first_timers = '\nFirst timers are marked with <:ariagitgut:752675425905541120>';
 const text_loot_need = '\nLoot needers are marked with 💰';
 const row = new ActionRowBuilder()
