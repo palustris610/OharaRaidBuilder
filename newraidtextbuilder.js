@@ -3,7 +3,7 @@ const { time } = require('@discordjs/builders');
 const row = new ActionRowBuilder();
 
 function raidtextbuilder(raidtitle, description, creator, datetime, roles, modifiers, imageurl, ping) {
-	console.log('Dynamic builder sent by: ' + creator);
+	console.log('Dynamic builder sent by ' + creator + ' at ' + new Date().toLocaleString('hu-HU', { timeZone: 'UTC' }));
 	console.log('Strings: ' + raidtitle + ';' + description + ';' + datetime + ';' + imageurl + ';' + ping);
 	console.log('Roles:');
 	console.log(roles);
