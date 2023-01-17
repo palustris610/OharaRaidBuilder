@@ -3,25 +3,25 @@ const { time } = require('@discordjs/builders');
 const row = new ActionRowBuilder();
 
 function raidtextbuilder(raidtitle, description, creator, datetime, roles, modifiers, imageurl, ping) {
-	console.log('Dynamic builder sent by ' + creator + ' at ' + new Date().toLocaleString('hu-HU', { timeZone: 'UTC' }));
-	console.log('Strings: ' + raidtitle + ';' + description + ';' + datetime + ';' + imageurl + ';' + ping);
-	console.log('Roles:');
-	console.log(roles);
-	console.log('Modifiers:');
-	console.log(modifiers);
+	// console.log('Dynamic builder sent by ' + creator.value + ' at ' + new Date().toLocaleString('hu-HU', { timeZone: 'UTC' }));
+	// console.log('Strings: ' + raidtitle.value + ';' + description.value + ';' + datetime.value + ';' + imageurl.value + ';' + ping.value);
+	// console.log('Roles:');
+	// console.log(roles);
+	// console.log('Modifiers:');
+	// console.log(modifiers);
 	let ping_text = '\u200B';
-	if (ping != null & ping != undefined) {
-		ping_text = ping_text + ping.toString();
+	if (ping.value != null & ping.value != undefined) {
+		ping_text = ping_text + ping.value.toString();
 	}
-	let additional_description = '\nEvent time: ' + time(new Date(datetime)) +
-	'\nRelative time: ' + time(new Date(datetime), 'R');
+	let additional_description = '\nEvent time: ' + time(new Date(datetime.value)) +
+	'\nRelative time: ' + time(new Date(datetime.value), 'R');
 	
 	let embed = new EmbedBuilder()
 		.setColor('#0099ff')
-		.setTitle(raidtitle)
-		.setDescription(description + additional_description)
-		.setTimestamp(new Date(datetime))
-		.setFooter({text:'Event by ' + creator});
+		.setTitle(raidtitle.value)
+		.setDescription(description.value + additional_description)
+		//.setTimestamp(new Date(datetime.value))
+		.setFooter({text:'Event by ' + creator.value});
 	let counter = 1;
 	roles.forEach(element => {
 		const roleText = element.value;
@@ -31,8 +31,6 @@ function raidtextbuilder(raidtitle, description, creator, datetime, roles, modif
 		}
 		else {
 			emojiId = roleText.match(/\p{Emoji}+/gu).pop();
-			console.log(roleText);
-			console.log(emojiId);
 		}
 		row.addComponents( //Button
 			new ButtonBuilder()
@@ -68,8 +66,8 @@ function raidtextbuilder(raidtitle, description, creator, datetime, roles, modif
 		});
 	}
 	
-	if (imageurl != null & imageurl != undefined) {
-		embed = embed.setThumbnail(imageurl);
+	if (imageurl.value != null & imageurl.value != undefined) {
+		embed = embed.setThumbnail(imageurl.value);
 	}
 	return { content: ping_text, embeds: [embed], components: [row] };
 }

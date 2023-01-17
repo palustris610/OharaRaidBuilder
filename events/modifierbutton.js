@@ -15,7 +15,7 @@ module.exports = {
 			emojiId = interaction.component.emoji.name;
 		}
 		const nick = '<@' + interaction.member.id + '>';
-		console.log(nick + ' pushed button: ' + emojiId + ' at ' + new Date().toLocaleString('hu-HU', { timeZone: 'UTC' }))
+		console.log(nick + interaction.member.displayName + ' pushed button: ' + emojiId + ' at ' + new Date().toLocaleString('hu-HU', { timeZone: 'UTC' }) + ' UTC')
 		let present = false;
 		const msg = interaction.message;
 		const emb = msg.embeds[0];
