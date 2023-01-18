@@ -10,8 +10,8 @@ module.exports = {
 				.setRequired(true)),
 	async execute(interaction) {
 		const datetime = interaction.options.getString('datetime');
-		const text = 'Your datetime: ' + time(new Date(datetime)) +
-		'\nRelative time: ' + time(new Date(datetime), 'R');
+		const text = 'Your datetime: ' + time(new Date(Date.parse(datetime))) +
+		'\nRelative time: ' + time(new Date(Date.parse(datetime)), 'R');
 		return interaction.reply(text);
 	},
 };

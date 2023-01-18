@@ -34,13 +34,6 @@ function updateButtons(message, newCollection, type){
                 .setStyle(ButtonStyle.Secondary));
         });
     }
-    console.log(roleButtons);
-    console.log(modifButtons);
-    console.log(row);
-    // roleButtons.forEach(element => {
-    //     row.addComponents(element);
-    //     console.log(row);
-    // });
     row.setComponents(roleButtons);
     if (modifButtons.length > 0) {
         modifButtons.forEach(element => {
@@ -56,7 +49,14 @@ function EmojiSearch(input){
         return input.substring(input.indexOf(':',3) + 1,input.indexOf('>'));
     }
     else {
-        return input.match(/\p{Emoji}+/gu).pop();
+        const results = input.match(/\p{Emoji}+/gu);
+        if (results != null) {
+            return results.pop();
+        }
+        else {
+            console.log('No emoji found!');
+            return '❓';
+        }
     }
 }
 

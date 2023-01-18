@@ -1,6 +1,6 @@
 const {  ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
 const { time } = require('@discordjs/builders');
-const row = new ActionRowBuilder();
+let row = new ActionRowBuilder();
 
 function raidtextbuilder(raidtitle, description, creator, datetime, roles, modifiers, imageurl, ping) {
 	// console.log('Dynamic builder sent by ' + creator.value + ' at ' + new Date().toLocaleString('hu-HU', { timeZone: 'UTC' }));
@@ -23,6 +23,7 @@ function raidtextbuilder(raidtitle, description, creator, datetime, roles, modif
 		//.setTimestamp(new Date(datetime.value))
 		.setFooter({text:'Event by ' + creator.value});
 	let counter = 1;
+	row = new ActionRowBuilder();
 	roles.forEach(element => {
 		const roleText = element.value;
 		let emojiId = '';

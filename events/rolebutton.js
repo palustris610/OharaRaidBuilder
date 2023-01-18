@@ -8,6 +8,7 @@ module.exports = {
 			return;
 		}
 		let emojiId = '';
+		const idNumber = Number(interaction.customId.substring(interaction.customId.length - 1));
 		if (interaction.component.emoji.id != null) {
 			emojiId = interaction.component.emoji.id;
 		}
@@ -34,8 +35,9 @@ module.exports = {
 		if (occurrence == '') {
 			occurrence = nick;
 		}
-		emb.fields.forEach(fld => {
-			if (fld.name.includes(emojiId)) {
+		for (let index = 0; index < emb.fields.length; index++) {
+			const fld = emb.fields[index];
+			if (index == (idNumber - 1)) {
 				const value = fld.value.split('\n');
 				const new_lines = [];
 				let present_role = false;
@@ -62,7 +64,7 @@ module.exports = {
 			else {
 				new_flds.push(fld);
 			}
-		});
+		}
 		const new_embed = EmbedBuilder.from(msg.embeds[0]);
 		new_embed.setFields(new_flds);
 		// emb.setFields(new_flds);
