@@ -31,10 +31,10 @@ module.exports = {
 		await wait(2000);
 		const questionmsg = await privt.send('Here comes the questions!');
 		await wait(2000);
-		await askQuestionNew('Which Channel will be the Event posted to? Mention the channel using #channelname', editTargetChannel, privt, questionmsg, samplemsg);
-		await askQuestionNew('Give me a Title:', editTitle, privt, questionmsg, samplemsg);
-		await askQuestionNew('Give me a Description:', editDescription, privt, questionmsg, samplemsg);
-		await askQuestionNew('Give me a Date and time:   (Note the format: 2077-12-31T23:14:59)', editTime, privt, questionmsg, samplemsg);
+		await askQuestion('Which Channel will be the Event posted to? Mention the channel using #channelname', editTargetChannel, privt, questionmsg, samplemsg);
+		await askQuestion('Give me a Title:', editTitle, privt, questionmsg, samplemsg);
+		await askQuestion('Give me a Description:', editDescription, privt, questionmsg, samplemsg);
+		await askQuestion('Give me a Date and time:\nNote the format: YYYY MM DD hh:mm, MM DD YYYY hh:mm, UTC+0 timezone accepted. Many combinations are possible.\nExamples: 2077 05 07 14:32, 2045 jan 3 21:12 UTC+1, feb 11 2045 10:00 UTC-2', editTime, privt, questionmsg, samplemsg);
 		await questionmsg.edit('How many roles will there be? (1-5)');
 		const roleCount = await privt.awaitMessages({max: 1})
 			.then(collected => {
@@ -43,7 +43,7 @@ module.exports = {
 				return num;
 			});
 		for (let index = 1; index <= roleCount; index++) {
-			await askQuestionNew('What will role' + index + ' be? Must include an emoji for the Button. Example: 👻Ghosts', editRole, privt, questionmsg, samplemsg, index)
+			await askQuestion('What will role' + index + ' be? Must include an emoji for the Button. Example: 👻Ghosts', editRole, privt, questionmsg, samplemsg, index)
 		}
 		
 		//ASK if finished or do optional stuff or edit the other fields
@@ -51,6 +51,7 @@ module.exports = {
 
 		//OPTIONAL STUFF
 		//copy the roles for modifiers
+		//modifier buttons for second row!!!!
 		//how to image and thumbnail? 
 		//how to do color (hex?)
 		//ping
@@ -75,7 +76,7 @@ module.exports = {
 	},
 };
 
-async function askQuestionNew(questionText, func, privt, questionmsg, samplemsg, index){
+async function askQuestion(questionText, func, privt, questionmsg, samplemsg, index){
 	await questionmsg.edit(questionText);
 	await privt.awaitMessages({max: 1})
 			.then(collected => {
@@ -85,3 +86,12 @@ async function askQuestionNew(questionText, func, privt, questionmsg, samplemsg,
 			});
 }
 
+async function askQuestionWithButtons(questionText, func, privt, questionmsg, samplemsg, index){
+	await questionmsg.edit(questionText);
+	await privt.awaitMessages({max: 1})
+			.then(collected => {
+				const exit = func(samplemsg, collected.first().content, index);
+				collected.first().delete(); //try deleting the answer so save space
+				return exit;
+			});
+}
