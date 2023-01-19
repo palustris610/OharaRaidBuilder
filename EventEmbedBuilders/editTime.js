@@ -3,7 +3,7 @@ const { time } = require('@discordjs/builders');
 //const row = new ActionRowBuilder();
 
 async function editTime(message, datetime){ //or embed directly?
-    const newTime = new Date(Date.parse(newTime));
+    const newTime = new Date(Date.parse(datetime));
     if (newTime == NaN) {
         //error, invalid string input, could not parse to datetime
     }
