@@ -4,7 +4,10 @@ const { updateRoleButtons } = require('./updateRoleButtons.js');
 async function editRole(message, newRole, index){ 
     const modifiedEmbed = EmbedBuilder.from(message.embeds[0]);
     const origFields = message.embeds[0].fields;
-    const origModRow = message.components[1]; //second ActionRow, modifiers
+    let origModRow = message.components[1]; //second ActionRow, modifiers
+    if (origModRow == undefined | origModRow == null) {
+        origModRow = [];
+    }
     const newFields = [];
     let updated = false;
     for (let i = 0; i < origFields.length; i++) {
