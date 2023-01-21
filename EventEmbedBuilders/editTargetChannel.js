@@ -1,9 +1,11 @@
 const {  ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
+const { askQuestion } = require('./askQuestion');
 //const { time } = require('@discordjs/builders');
 //const row = new ActionRowBuilder();
 
-async function editTargetChannel(message, newChannel){ //or embed directly?
-    const origContent = message.content;
+async function editTargetChannel(samplemsg, questionmsg, privt){ //or embed directly?
+    const newChannel = await askQuestion('Which Channel will be the Event posted to? Mention the channel using #channelname', privt, questionmsg);
+    const origContent = samplemsg.content;
     const channelString = 'Your event will be posted into channel: ';
     let newContent = '';
 
@@ -14,7 +16,7 @@ async function editTargetChannel(message, newChannel){ //or embed directly?
         newContent = origContent.substring(0, origContent.indexOf(': ') + 2);
     }
     newContent = newContent + newChannel;
-    await message.edit({content: newContent})
+    await samplemsg.edit({content: newContent})
     return 0;
 }
 

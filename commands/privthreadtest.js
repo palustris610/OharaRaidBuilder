@@ -1,7 +1,8 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { ChannelType, ThreadChannel } = require('discord.js');
+const { ChannelType, ThreadChannel, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { editDescription } = require('../EventEmbedBuilders/editDescription.js');
-const { editRole } = require('../EventEmbedBuilders/editRole.js');
+const { editModifiers } = require('../EventEmbedBuilders/editModifer.js');
+const { editRole, editRoles } = require('../EventEmbedBuilders/editRole.js');
 const { editTargetChannel } = require('../EventEmbedBuilders/editTargetChannel.js');
 const { editTime } = require('../EventEmbedBuilders/editTime.js');
 const { editTitle } = require('../EventEmbedBuilders/editTitle.js');
@@ -10,6 +11,24 @@ const ptb = require('../privthreadbuilder.js');
 
 const raidtitle = {value: 'Title here'}, description = {value: 'Description here'}, creator = {value: ''}, datetime = {value: '2077-07-07T07:07:07'};
 const roles = [{name: 'role1', value: '👻Ghosts'}], modifiers = [], imageurl = {value: undefined}, ping = {value: undefined};
+
+const editRows = [new ActionRowBuilder()
+					.setComponents([new ButtonBuilder().setCustomId('channel').setLabel('TargetChannel').setStyle(ButtonStyle.Secondary),
+									new ButtonBuilder().setCustomId('title').setLabel('Title').setStyle(ButtonStyle.Secondary),
+									new ButtonBuilder().setCustomId('description').setLabel('Description').setStyle(ButtonStyle.Secondary),
+									new ButtonBuilder().setCustomId('datetime').setLabel('Date&Time').setStyle(ButtonStyle.Secondary),
+									new ButtonBuilder().setCustomId('roles').setLabel('Roles').setStyle(ButtonStyle.Secondary)]),
+					new ActionRowBuilder()
+					.setComponents([new ButtonBuilder().setCustomId('modifiers').setLabel('Modifiers').setStyle(ButtonStyle.Secondary),
+									new ButtonBuilder().setCustomId('image').setLabel('Image').setStyle(ButtonStyle.Secondary),
+									new ButtonBuilder().setCustomId('thumbnail').setLabel('Thumbnail').setStyle(ButtonStyle.Secondary),
+									// new ButtonBuilder().setCustomId('attendees').setLabel('Attendees').setStyle(ButtonStyle.Secondary),
+									new ButtonBuilder().setCustomId('color').setLabel('Color').setStyle(ButtonStyle.Secondary)]),
+					new ActionRowBuilder()
+					.setComponents([new ButtonBuilder().setCustomId('publish').setLabel('Publish').setStyle(ButtonStyle.Primary),
+									new ButtonBuilder().setCustomId('cancel').setLabel('Cancel').setStyle(ButtonStyle.Danger)])
+];
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('privthread')
@@ -31,21 +50,41 @@ module.exports = {
 		await wait(2000);
 		const questionmsg = await privt.send('Here comes the questions!');
 		await wait(2000);
-		await askQuestion('Which Channel will be the Event posted to? Mention the channel using #channelname', editTargetChannel, privt, questionmsg, samplemsg);
-		await askQuestion('Give me a Title:', editTitle, privt, questionmsg, samplemsg);
-		await askQuestion('Give me a Description:', editDescription, privt, questionmsg, samplemsg);
-		await askQuestion('Give me a Date and time:\nNote the format: YYYY MM DD hh:mm, MM DD YYYY hh:mm, UTC+0 timezone accepted. Many combinations are possible.\nExamples: 2077 05 07 14:32, 2045 jan 3 21:12 UTC+1, feb 11 2045 10:00 UTC-2', editTime, privt, questionmsg, samplemsg);
-		await questionmsg.edit('How many roles will there be? (1-5)');
-		const roleCount = await privt.awaitMessages({max: 1})
-			.then(collected => {
-				const num = Number(collected.first().content);
-				collected.first().delete();
-				return num;
-			});
-		for (let index = 1; index <= roleCount; index++) {
-			await askQuestion('What will role' + index + ' be? Must include an emoji for the Button. Example: 👻Ghosts', editRole, privt, questionmsg, samplemsg, index)
-		}
+		//Mandatory questions
+		await editTargetChannel(samplemsg, questionmsg, privt);
+		await editTitle(samplemsg, questionmsg, privt);
+		await editDescription(samplemsg, questionmsg, privt);
+		await editTime(samplemsg, questionmsg, privt);
+		await editRoles(samplemsg, questionmsg, privt);	
 		
+		let notFinished = true;
+		const expectedIDs = ['channel', 'title', 'description', 'datetime', 'roles', 'modifiers', 'image', 'thumbnail', 'color', 'attendees', 'publish', 'cancel'];
+		const filter = inter => expectedIDs.includes(inter.customId);
+		while (notFinished) {
+			await questionmsg.edit({content: 'The mandatory questions are done. Would you like to use the optional features, edit any of the properties, or post the Event?', components: editRows});
+			let selection = await privt.awaitMessageComponent({filter, max: 1})
+				.then(interaction => {
+					interaction.deferUpdate();
+					return interaction.customId;
+				});
+			switch (selection) {
+				case 'channel': await editTargetChannel(samplemsg, questionmsg, privt); break;
+				case 'title': await editTitle(samplemsg, questionmsg, privt); break;
+				case 'description': await editDescription(samplemsg, questionmsg, privt); break;
+				case 'datetime': await editTime(samplemsg, questionmsg, privt); break;
+				case 'roles': await editRoles(samplemsg, questionmsg, privt); break;
+				case 'modifiers': await editModifiers(samplemsg, questionmsg, privt); break;
+				// case 'image': await  (samplemsg, questionmsg, privt); break;
+				// case 'thumbnail': await  (samplemsg, questionmsg, privt); break;
+				// case 'color': await  (samplemsg, questionmsg, privt); break;
+				// case 'publish': await  (samplemsg, questionmsg, privt); break;
+				// case 'cancel': await  (samplemsg, questionmsg, privt); break;
+				// case 'attendees': await  (samplemsg, questionmsg, privt); break;
+				default:
+					//should be impossible because of filters
+					break;
+			}
+		}
 		//ASK if finished or do optional stuff or edit the other fields
 		//provide a method to choose the next step
 
@@ -76,15 +115,7 @@ module.exports = {
 	},
 };
 
-async function askQuestion(questionText, func, privt, questionmsg, samplemsg, index){
-	await questionmsg.edit(questionText);
-	await privt.awaitMessages({max: 1})
-			.then(collected => {
-				const exit = func(samplemsg, collected.first().content, index);
-				collected.first().delete(); //try deleting the answer so save space
-				return exit;
-			});
-}
+
 
 async function askQuestionWithButtons(questionText, func, privt, questionmsg, samplemsg, index){
 	await questionmsg.edit(questionText);

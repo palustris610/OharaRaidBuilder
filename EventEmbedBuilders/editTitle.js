@@ -1,11 +1,13 @@
 const {  ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
+const { askQuestion } = require('./askQuestion');
 //const { time } = require('@discordjs/builders');
 //const row = new ActionRowBuilder();
 
-async function editTitle(message, newTitle){ //or embed directly?
-    const modifiedEmbed = EmbedBuilder.from(message.embeds[0]);
+async function editTitle(samplemsg, questionmsg, privt){ //or embed directly?
+    const newTitle = await askQuestion('Give me a Title:', privt, questionmsg);
+    const modifiedEmbed = EmbedBuilder.from(samplemsg.embeds[0]);
     modifiedEmbed.setTitle(newTitle);
-    await message.edit({embeds: [modifiedEmbed]})
+    await samplemsg.edit({embeds: [modifiedEmbed]})
     return 0;
 }
 

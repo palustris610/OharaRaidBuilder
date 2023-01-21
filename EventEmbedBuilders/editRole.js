@@ -1,13 +1,26 @@
 const { EmbedBuilder } = require('discord.js');
+const { askQuestion } = require('./askQuestion.js');
 const { updateRoleButtons } = require('./updateRoleButtons.js');
 
-async function editRole(message, newRole, index){ 
-    const modifiedEmbed = EmbedBuilder.from(message.embeds[0]);
-    const origFields = message.embeds[0].fields;
-    let origModRow = message.components[1]; //second ActionRow, modifiers
-    if (origModRow == undefined | origModRow == null) {
-        origModRow = [];
+async function editRoles(samplemsg, questionmsg, privt){
+    await questionmsg.edit({content: 'How many roles will there be? (1-5)', components: []});
+    const roleCount = await privt.awaitMessages({max: 1})
+        .then(collected => {
+            const num = Number(collected.first().content);
+            collected.first().delete();
+            return num;
+        });
+    for (let index = 1; index <= roleCount; index++) {
+        await editRole(samplemsg, questionmsg, privt, index);
     }
+}
+
+async function editRole(samplemsg, questionmsg, privt, index){ 
+    const newRole = await askQuestion('What will role' + index + ' be? Must include an emoji for the Button. Example: 👻Ghosts', privt, questionmsg, index)
+    const modifiedEmbed = EmbedBuilder.from(samplemsg.embeds[0]);
+    const origFields = samplemsg.embeds[0].fields;
+    let origModRow = samplemsg.components[1]; //second ActionRow, modifiers
+
     const newFields = [];
     let updated = false;
     for (let i = 0; i < origFields.length; i++) {
@@ -35,8 +48,14 @@ async function editRole(message, newRole, index){
     //update buttons -> generate a new button row
     const newRow = updateRoleButtons(newFields);
     modifiedEmbed.setFields(newFields);
-    await message.edit({embeds: [modifiedEmbed], components: [newRow, origModRow]});
+
+    const row = [];
+    row.push(newRow);
+    if (origModRow != undefined & origModRow != null) {
+        row.push(origModRow);
+    }
+    await samplemsg.edit({embeds: [modifiedEmbed], components: row});
     return ;
 }
 
-module.exports = {editRole};
+module.exports = {editRoles};

@@ -3,8 +3,7 @@ module.exports = {
 	name: 'interactionCreate',
 	execute(interaction) {
 		if (!interaction.isButton()) return;
-		const expected_ids = 'modifier';
-		if (!interaction.customId.includes(expected_ids)) {
+		if (!interaction.customId.includes('modifier') | interaction.customId.includes('modifiers')) {
 			return;
 		}
 		let emojiId = '';

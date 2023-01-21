@@ -1,13 +1,15 @@
 const {  ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
+const { askQuestion } = require('./askQuestion');
 //const { time } = require('@discordjs/builders');
 //const row = new ActionRowBuilder();
 
-async function editDescription(message, newDescription){ //or embed directly?
-    const modifiedEmbed = EmbedBuilder.from(message.embeds[0]);
-    const origDescript = message.embeds[0].description;
+async function editDescription(samplemsg, questionmsg, privt){ //or embed directly?
+    const newDescription = await askQuestion('Give me a Description:', privt, questionmsg);
+    const modifiedEmbed = EmbedBuilder.from(samplemsg.embeds[0]);
+    const origDescript = samplemsg.embeds[0].description;
     const dateStuff = origDescript.substring(origDescript.indexOf('\nEvent time:'));
     modifiedEmbed.setDescription(newDescription + dateStuff);
-    await message.edit({embeds: [modifiedEmbed]})
+    await samplemsg.edit({embeds: [modifiedEmbed]})
     return 0;
 }
 
