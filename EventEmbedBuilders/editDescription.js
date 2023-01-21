@@ -1,7 +1,5 @@
-const {  ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const { askQuestion } = require('./askQuestion');
-//const { time } = require('@discordjs/builders');
-//const row = new ActionRowBuilder();
 
 async function editDescription(samplemsg, questionmsg, privt){ //or embed directly?
     const newDescription = await askQuestion('Give me a Description:', privt, questionmsg);

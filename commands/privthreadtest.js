@@ -1,11 +1,17 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('discord.js');
 const { ChannelType, ThreadChannel, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { cancelBuilding } = require('../EventEmbedBuilders/cancelBuilding.js');
+const { editColor } = require('../EventEmbedBuilders/editColor.js');
 const { editDescription } = require('../EventEmbedBuilders/editDescription.js');
+const { editImage } = require('../EventEmbedBuilders/editImage.js');
+const { editMention } = require('../EventEmbedBuilders/editMention.js');
 const { editModifiers } = require('../EventEmbedBuilders/editModifer.js');
-const { editRole, editRoles } = require('../EventEmbedBuilders/editRole.js');
+const { editRoles } = require('../EventEmbedBuilders/editRole.js');
 const { editTargetChannel } = require('../EventEmbedBuilders/editTargetChannel.js');
+const { editThumbnail } = require('../EventEmbedBuilders/editThumbnail.js');
 const { editTime } = require('../EventEmbedBuilders/editTime.js');
 const { editTitle } = require('../EventEmbedBuilders/editTitle.js');
+const { publishEvent } = require('../EventEmbedBuilders/publishEvent.js');
 const wait = require('node:timers/promises').setTimeout;
 const ptb = require('../privthreadbuilder.js');
 
@@ -13,19 +19,19 @@ const raidtitle = {value: 'Title here'}, description = {value: 'Description here
 const roles = [{name: 'role1', value: '👻Ghosts'}], modifiers = [], imageurl = {value: undefined}, ping = {value: undefined};
 
 const editRows = [new ActionRowBuilder()
-					.setComponents([new ButtonBuilder().setCustomId('channel').setLabel('TargetChannel').setStyle(ButtonStyle.Secondary),
-									new ButtonBuilder().setCustomId('title').setLabel('Title').setStyle(ButtonStyle.Secondary),
-									new ButtonBuilder().setCustomId('description').setLabel('Description').setStyle(ButtonStyle.Secondary),
-									new ButtonBuilder().setCustomId('datetime').setLabel('Date&Time').setStyle(ButtonStyle.Secondary),
-									new ButtonBuilder().setCustomId('roles').setLabel('Roles').setStyle(ButtonStyle.Secondary)]),
+					.setComponents([new ButtonBuilder().setCustomId('channel').setLabel('TargetChannel').setStyle(ButtonStyle.Primary),
+									new ButtonBuilder().setCustomId('title').setLabel('Title').setStyle(ButtonStyle.Primary),
+									new ButtonBuilder().setCustomId('description').setLabel('Description').setStyle(ButtonStyle.Primary),
+									new ButtonBuilder().setCustomId('datetime').setLabel('Date&Time').setStyle(ButtonStyle.Primary),
+									new ButtonBuilder().setCustomId('roles').setLabel('Roles').setStyle(ButtonStyle.Primary)]),
 					new ActionRowBuilder()
 					.setComponents([new ButtonBuilder().setCustomId('modifiers').setLabel('Modifiers').setStyle(ButtonStyle.Secondary),
 									new ButtonBuilder().setCustomId('image').setLabel('Image').setStyle(ButtonStyle.Secondary),
 									new ButtonBuilder().setCustomId('thumbnail').setLabel('Thumbnail').setStyle(ButtonStyle.Secondary),
-									// new ButtonBuilder().setCustomId('attendees').setLabel('Attendees').setStyle(ButtonStyle.Secondary),
+									new ButtonBuilder().setCustomId('mention').setLabel('Mention').setStyle(ButtonStyle.Secondary),
 									new ButtonBuilder().setCustomId('color').setLabel('Color').setStyle(ButtonStyle.Secondary)]),
 					new ActionRowBuilder()
-					.setComponents([new ButtonBuilder().setCustomId('publish').setLabel('Publish').setStyle(ButtonStyle.Primary),
+					.setComponents([new ButtonBuilder().setCustomId('publish').setLabel('Publish').setStyle(ButtonStyle.Success),
 									new ButtonBuilder().setCustomId('cancel').setLabel('Cancel').setStyle(ButtonStyle.Danger)])
 ];
 
@@ -58,7 +64,7 @@ module.exports = {
 		await editRoles(samplemsg, questionmsg, privt);	
 		
 		let notFinished = true;
-		const expectedIDs = ['channel', 'title', 'description', 'datetime', 'roles', 'modifiers', 'image', 'thumbnail', 'color', 'attendees', 'publish', 'cancel'];
+		const expectedIDs = ['channel', 'title', 'description', 'datetime', 'roles', 'modifiers', 'image', 'thumbnail', 'color', 'mention', 'publish', 'cancel'];
 		const filter = inter => expectedIDs.includes(inter.customId);
 		while (notFinished) {
 			await questionmsg.edit({content: 'The mandatory questions are done. Would you like to use the optional features, edit any of the properties, or post the Event?', components: editRows});
@@ -74,33 +80,31 @@ module.exports = {
 				case 'datetime': await editTime(samplemsg, questionmsg, privt); break;
 				case 'roles': await editRoles(samplemsg, questionmsg, privt); break;
 				case 'modifiers': await editModifiers(samplemsg, questionmsg, privt); break;
-				// case 'image': await  (samplemsg, questionmsg, privt); break;
-				// case 'thumbnail': await  (samplemsg, questionmsg, privt); break;
-				// case 'color': await  (samplemsg, questionmsg, privt); break;
-				// case 'publish': await  (samplemsg, questionmsg, privt); break;
-				// case 'cancel': await  (samplemsg, questionmsg, privt); break;
-				// case 'attendees': await  (samplemsg, questionmsg, privt); break;
+				case 'image': await  editImage(samplemsg, questionmsg, privt); break;
+				case 'thumbnail': await  editThumbnail(samplemsg, questionmsg, privt); break;
+				case 'color': await  editColor(samplemsg, questionmsg, privt); break;
+				case 'mention': await  editMention(samplemsg, questionmsg, privt); break;
+				case 'publish': 
+					const isPublished = await  publishEvent(samplemsg, questionmsg, privt);
+					console.log(isPublished);
+					if (isPublished == 'yesPublish') {
+						notFinished = false;
+					}
+					break;
+				case 'cancel': 
+					const isCancelled = await cancelBuilding(samplemsg, questionmsg, privt);
+					console.log(isCancelled);
+					if (isCancelled == 'yesCancel') {
+						notFinished = false;
+					}
+					break;
 				default:
 					//should be impossible because of filters
 					break;
 			}
 		}
-		//ASK if finished or do optional stuff or edit the other fields
-		//provide a method to choose the next step
-
-		//OPTIONAL STUFF
-		//copy the roles for modifiers
-		//modifier buttons for second row!!!!
-		//how to image and thumbnail? 
-		//how to do color (hex?)
-		//ping
-
-
-		//Solution for bot crash/restart, continue where left
-
-		//Show all optional stuff for full setup for the first time, or skip them and provide Edit options at the end
-
 		//Input validations:
+		//-wrap all methods in trycatch, give feedback for errors
 		//-channel must be a channel mention
 		//-title, description is just text
 		//-datetime must be a valid date
@@ -108,9 +112,9 @@ module.exports = {
 		//-ping must be a mention of a role or everyone, etc
 		//-image must be a hyperlink? or maybe attachment?
 
-		await privt.send('OK BYE');
-		//await wait(10_000);
-		//await privt.delete();
+		await privt.send('Okay, we\'re finished. Bye!');
+		await wait(5_000);
+		await privt.delete();
 		console.log('deleted thread');
 	},
 };
