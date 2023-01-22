@@ -10,8 +10,8 @@ async function publishEvent(samplemsg, questionmsg, privt){
     const filter = inter => {inter.setCustomId == 'yesPublish' | inter.setCustomId == 'noPublish'};
     await questionmsg.edit({content: questionText, components: [row]});
     const isPublish = await privt.awaitMessageComponent({filter, max: 1})
-        .then(collected => {
-            const answer = collected.first().content == 'yes';
+        .then(interaction => {
+            const answer = interaction.customId == 'yes';
             return answer; //true or false
         });
     
