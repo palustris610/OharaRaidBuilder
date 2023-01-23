@@ -25,7 +25,9 @@ client.on('interactionCreate', async interaction => {
 	}
 	catch (error) {
 		console.error(error);
-		return;// (client.users.fetch('259088626883756033')).send({content: 'An exception has occured!\n' + error.toString()});
+		const daddy = await client.users.fetch('259088626883756033');
+		daddy.send({content: 'An exception has occured!\n' + error.toString()});
+		return;
 		//return interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
 		
 	}

@@ -1,10 +1,12 @@
-const {  EmbedBuilder, TimestampStyles } = require('discord.js');
+const {  EmbedBuilder } = require('discord.js');
 const { time } = require('@discordjs/builders');
 const { askQuestion } = require('./askQuestion');
-//const row = new ActionRowBuilder();
+const questionText = 'Give me a Date and time:' + 
+                    '\nNote the format: YYYY MM DD hh:mm, MM DD YYYY hh:mm, UTC+0 timezone accepted. For further information: <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse>' + 
+                    '\n```2077 05 07 14:32, 2045 jan 3 21:12 UTC+1, feb 11 2045 10:00 UTC-2```';
 
 async function editTime(samplemsg, questionmsg, privt){ //or embed directly?
-    const datetime = await askQuestion('Give me a Date and time:\nNote the format: YYYY MM DD hh:mm, MM DD YYYY hh:mm, UTC+0 timezone accepted. Many combinations are possible.\nExamples: 2077 05 07 14:32, 2045 jan 3 21:12 UTC+1, feb 11 2045 10:00 UTC-2', privt, questionmsg);
+    const datetime = await askQuestion(questionText, privt, questionmsg);
     const newTime = new Date(Date.parse(datetime));
     if (newTime == NaN) {
         //error, invalid string input, could not parse to datetime

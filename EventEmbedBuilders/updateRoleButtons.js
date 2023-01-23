@@ -1,4 +1,4 @@
-const {  ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const { EmojiSearch } = require('./emojiSearch');
 
 function updateRoleButtons(newRoles){ 
@@ -10,7 +10,6 @@ function updateRoleButtons(newRoles){
             .setEmoji(EmojiSearch(field.name))
             .setStyle(ButtonStyle.Secondary));
     });
-    console.log(row);
     return row;
 }
 

@@ -51,23 +51,24 @@ module.exports = {
 		await privt.join();
 		await interaction.reply({content: 'Check the private thread!\n<#' + privt.id + '>', ephemeral: true});
 		await privt.send('Hey there <@' + memberId + '>! Here\'s a the sample of your new event. Please answer the questions as they pop up, and i will modify the sample as we go along.');
-		await wait(2000);
+		await wait(1000);
 		const samplemsg = await privt.send(ptb.raidtextbuilder(raidtitle, description, creator, datetime, roles, modifiers, imageurl, ping));
-		await wait(2000);
+		await wait(1000);
 		const questionmsg = await privt.send('Here comes the questions!');
 		await wait(2000);
 		//Mandatory questions
-		await editTargetChannel(samplemsg, questionmsg, privt);
-		await editTitle(samplemsg, questionmsg, privt);
-		await editDescription(samplemsg, questionmsg, privt);
-		await editTime(samplemsg, questionmsg, privt);
-		await editRoles(samplemsg, questionmsg, privt);	
+		// await editTargetChannel(samplemsg, questionmsg, privt);
+		// await editTitle(samplemsg, questionmsg, privt);
+		// await editDescription(samplemsg, questionmsg, privt);
+		// await editTime(samplemsg, questionmsg, privt);
+		// await editRoles(samplemsg, questionmsg, privt);	
 		
 		let notFinished = true;
+		let eventLink = '';
 		const expectedIDs = ['channel', 'title', 'description', 'datetime', 'roles', 'modifiers', 'image', 'thumbnail', 'color', 'mention', 'publish', 'cancel'];
 		const filter = inter => expectedIDs.includes(inter.customId);
 		while (notFinished) {
-			await questionmsg.edit({content: 'The mandatory questions are done. Would you like to use the optional features, edit any of the properties, or post the Event?', components: editRows});
+			await questionmsg.edit({content: 'Would you like to edit any of the properties, or post the Event?', components: editRows});
 			let selection = await privt.awaitMessageComponent({filter, max: 1})
 				.then(interaction => {
 					interaction.deferUpdate();
@@ -85,10 +86,11 @@ module.exports = {
 				case 'color': await  editColor(samplemsg, questionmsg, privt); break;
 				case 'mention': await  editMention(samplemsg, questionmsg, privt); break;
 				case 'publish': 
-					const isPublished = await  publishEvent(samplemsg, questionmsg, privt);
-					console.log(isPublished);
-					if (isPublished == 'yesPublish') {
+					const publishResult = await  publishEvent(samplemsg, questionmsg, privt);
+					console.log(publishResult);
+					if (publishResult.answer == 'yesPublish') {
 						notFinished = false;
+						eventLink = publishResult.message.url;
 					}
 					break;
 				case 'cancel': 
@@ -103,6 +105,16 @@ module.exports = {
 					break;
 			}
 		}
+		//Questions:
+		//Roles option 0: default ✅Attending
+		//Role option extra: Agglomerate participants to separate ✅Attending field
+		//List mandatory questions first, or straight to option select? Maybe a separate slashcommand for it?
+
+		//TODOs:
+		//In case of any errors, provide a continue/pickup option. If any edit buttons are pressed, it should be able to continue
+		//Worst case, it crashes is the middle of a question.
+		//Edit option after posting.
+
 		//Input validations:
 		//-wrap all methods in trycatch, give feedback for errors
 		//-channel must be a channel mention
@@ -112,8 +124,11 @@ module.exports = {
 		//-ping must be a mention of a role or everyone, etc
 		//-image must be a hyperlink? or maybe attachment?
 
-		await privt.send('Okay, we\'re finished. Bye!');
-		await wait(5_000);
+		await questionmsg.edit({content: 'Okay, we\'re finished. This thread will be deleted in 30 seconds. Bye!', components: []});
+		if (eventLink != '') {
+			await privt.send('You can find your event here: ' + eventLink);
+		}
+		await wait(30_000);
 		await privt.delete();
 		console.log('deleted thread');
 	},

@@ -10,13 +10,17 @@ async function editRoles(samplemsg, questionmsg, privt){
             collected.first().delete();
             return num;
         });
+    const modifiedEmbed = EmbedBuilder.from(samplemsg.embeds[0]);
+    modifiedEmbed.setFields([]);
+    await samplemsg.edit({embeds: [modifiedEmbed]});
     for (let index = 1; index <= roleCount; index++) {
         await editRole(samplemsg, questionmsg, privt, index);
     }
 }
 
 async function editRole(samplemsg, questionmsg, privt, index){ 
-    const newRole = await askQuestion('What will role' + index + ' be? Must include an emoji for the Button. Example: 👻Ghosts', privt, questionmsg, index)
+    let newRole = await askQuestion('What will role' + index + ' be? Must include an emoji for the Button. Example: 👻Ghosts', privt, questionmsg, index);
+    newRole = newRole.content;
     const modifiedEmbed = EmbedBuilder.from(samplemsg.embeds[0]);
     const origFields = samplemsg.embeds[0].fields;
     let origModRow = samplemsg.components[1]; //second ActionRow, modifiers

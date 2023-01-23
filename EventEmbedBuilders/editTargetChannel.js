@@ -1,22 +1,28 @@
-const {  ActionRowBuilder, ButtonBuilder, EmbedBuilder, ButtonStyle } = require('discord.js');
 const { askQuestion } = require('./askQuestion');
-//const { time } = require('@discordjs/builders');
-//const row = new ActionRowBuilder();
+const questionText = 'Which Channel will be the Event posted to? Mention the channel using #channelname';
 
 async function editTargetChannel(samplemsg, questionmsg, privt){ //or embed directly?
-    const newChannel = await askQuestion('Which Channel will be the Event posted to? Mention the channel using #channelname', privt, questionmsg);
+    let newChannel = await askQuestion(questionText, privt, questionmsg);
+    newChannel = newChannel.content;
     const origContent = samplemsg.content;
-    const channelString = 'Your event will be posted into channel: ';
+    const channelString = 'Target channel: ';
+    const mentionString = '\nTarget mention: ';
     let newContent = '';
-
-    if (!origContent.includes(channelString)) {
-        newContent = origContent + channelString;
-    }
-    else {
+    let origMention = '';
+    if (origContent.includes(channelString)) {
         newContent = origContent.substring(0, origContent.indexOf(': ') + 2);
     }
-    newContent = newContent + newChannel;
-    await samplemsg.edit({content: newContent})
+    else {
+        newContent = channelString;
+    }
+    if (origContent.includes(mentionString)) {
+        origMention = origContent.substring(origContent.indexOf('\n'));
+    }
+    else {
+        origMention = mentionString;
+    }
+    newContent = newContent + newChannel + origMention;
+    await samplemsg.edit({content: newContent, allowedMentions: {parse: []}});
     return 0;
 }
 
