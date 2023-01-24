@@ -1,13 +1,13 @@
 const { ContextMenuCommandBuilder, ApplicationCommandType, EmbedBuilder } = require('discord.js');
+const { editEvent } = require('../EventEmbedBuilders/editEvent');
 //const { raidtextbuilder } = require('../raidtextbuilder.js');
 module.exports ={
     data: new ContextMenuCommandBuilder()
-	.setName('Edit raid')
+	.setName('Edit Event')
 	.setType(ApplicationCommandType.Message),
     async execute (interaction) {
         const msg = interaction.targetMessage;
-        const emb = EmbedBuilder.from(msg.embeds[0]).setTitle('EDITED');
-        await interaction.targetMessage.edit({embeds: [emb]});
-        await interaction.reply({content: 'edited', ephemeral: true});
+        editEvent(msg);
+        await interaction.reply({content: 'Editing should be available now.', ephemeral: true});
     }
 }
